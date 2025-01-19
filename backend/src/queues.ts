@@ -27,9 +27,8 @@ import { getMessageOptions } from "./services/WbotServices/SendWhatsAppMedia";
 import { ClosedAllOpenTickets } from "./services/WbotServices/wbotClosedTickets";
 import { logger } from "./utils/logger";
 
-
-const nodemailer = require('nodemailer');
-const CronJob = require('cron').CronJob;
+const nodemailer = require("nodemailer");
+const CronJob = require("cron").CronJob;
 
 const connection = process.env.REDIS_URI || "";
 const limiterMax = process.env.REDIS_OPT_LIMITER_MAX || 1;
@@ -92,7 +91,8 @@ async function handleSendMessage(job) {
   }
 }
 
-{/*async function handleVerifyQueue(job) {
+{
+  /*async function handleVerifyQueue(job) {
   logger.info("Buscando atendimentos perdidos nas filas");
   try {
     const companies = await Company.findAll({
@@ -112,9 +112,11 @@ async function handleSendMessage(job) {
           }
         },
       ]
-    }); */}
+    }); */
+}
 
-{/*    companies.map(async c => {
+{
+  /*    companies.map(async c => {
       c.whatsapps.map(async w => {
 
         if (w.status === "CONNECTED") {
@@ -194,13 +196,13 @@ async function handleSendMessage(job) {
     logger.error("SearchForQueue -> VerifyQueue: error", e.message);
     throw e;
   }
-}; */}
+}; */
+}
 
 async function handleCloseTicketsAutomatic() {
-  const job = new CronJob('*/1 * * * *', async () => {
+  const job = new CronJob("*/1 * * * *", async () => {
     const companies = await Company.findAll();
     companies.map(async c => {
-
       try {
         const companyId = c.id;
         await ClosedAllOpenTickets(companyId);
@@ -209,10 +211,9 @@ async function handleCloseTicketsAutomatic() {
         logger.error("ClosedAllOpenTickets -> Verify: error", e.message);
         throw e;
       }
-
     });
   });
-  job.start()
+  job.start();
 }
 
 async function handleVerifySchedules(job) {
@@ -306,7 +307,7 @@ async function handleVerifyCampaigns(job) {
 
   if (campaigns.length > 0)
     logger.info(`Campanhas encontradas: ${campaigns.length}`);
-  
+
   for (let campaign of campaigns) {
     try {
       const now = moment();
@@ -535,18 +536,27 @@ async function verifyAndFinalizeCampaign(campaign) {
   }
 
   const io = getIO();
-  io.to(`company-${campaign.companyId}-mainchannel`).emit(`company-${campaign.companyId}-campaign`, {
-    action: "update",
-    record: campaign
-  });
+  io.to(`company-${campaign.companyId}-mainchannel`).emit(
+    `company-${campaign.companyId}-campaign`,
+    {
+      action: "update",
+      record: campaign
+    }
+  );
 }
 
-function calculateDelay(index, baseDelay, longerIntervalAfter, greaterInterval, messageInterval) {
+function calculateDelay(
+  index,
+  baseDelay,
+  longerIntervalAfter,
+  greaterInterval,
+  messageInterval
+) {
   const diffSeconds = differenceInSeconds(baseDelay, new Date());
   if (index > longerIntervalAfter) {
-    return diffSeconds * 1000 + greaterInterval
+    return diffSeconds * 1000 + greaterInterval;
   } else {
-    return diffSeconds * 1000 + messageInterval
+    return diffSeconds * 1000 + messageInterval;
   }
 }
 
@@ -561,11 +571,13 @@ async function handleProcessCampaign(job) {
         const contactData = contacts.map(contact => ({
           contactId: contact.id,
           campaignId: campaign.id,
-          variables: settings.variables,
+          variables: settings.variables
         }));
 
         // const baseDelay = job.data.delay || 0;
-        const longerIntervalAfter = parseToMilliseconds(settings.longerIntervalAfter);
+        const longerIntervalAfter = parseToMilliseconds(
+          settings.longerIntervalAfter
+        );
         const greaterInterval = parseToMilliseconds(settings.greaterInterval);
         const messageInterval = settings.messageInterval;
 
@@ -573,17 +585,28 @@ async function handleProcessCampaign(job) {
 
         const queuePromises = [];
         for (let i = 0; i < contactData.length; i++) {
-          baseDelay = addSeconds(baseDelay, i > longerIntervalAfter ? greaterInterval : messageInterval);
+          baseDelay = addSeconds(
+            baseDelay,
+            i > longerIntervalAfter ? greaterInterval : messageInterval
+          );
 
           const { contactId, campaignId, variables } = contactData[i];
-          const delay = calculateDelay(i, baseDelay, longerIntervalAfter, greaterInterval, messageInterval);
+          const delay = calculateDelay(
+            i,
+            baseDelay,
+            longerIntervalAfter,
+            greaterInterval,
+            messageInterval
+          );
           const queuePromise = campaignQueue.add(
             "PrepareContact",
             { contactId, campaignId, variables, delay },
             { removeOnComplete: true }
           );
           queuePromises.push(queuePromise);
-          logger.info(`Registro enviado pra fila de disparo: Campanha=${campaign.id};Contato=${contacts[i].name};delay=${delay}`);
+          logger.info(
+            `Registro enviado pra fila de disparo: Campanha=${campaign.id};Contato=${contacts[i].name};delay=${delay}`
+          );
         }
         await Promise.all(queuePromises);
         await campaign.update({ status: "EM_ANDAMENTO" });
@@ -610,7 +633,7 @@ async function handlePrepareContact(job) {
     const messages = getCampaignValidMessages(campaign);
     if (messages.length) {
       const radomIndex = ultima_msg;
-      console.log('ultima_msg:', ultima_msg);
+      console.log("ultima_msg:", ultima_msg);
       ultima_msg++;
       if (ultima_msg >= messages.length) {
         ultima_msg = 0;
@@ -688,17 +711,23 @@ async function handleDispatchCampaign(job) {
     const wbot = await GetWhatsappWbot(campaign.whatsapp);
 
     if (!wbot) {
-      logger.error(`campaignQueue -> DispatchCampaign -> error: wbot not found`);
+      logger.error(
+        `campaignQueue -> DispatchCampaign -> error: wbot not found`
+      );
       return;
     }
 
     if (!campaign.whatsapp) {
-      logger.error(`campaignQueue -> DispatchCampaign -> error: whatsapp not found`);
+      logger.error(
+        `campaignQueue -> DispatchCampaign -> error: whatsapp not found`
+      );
       return;
     }
 
     if (!wbot?.user?.id) {
-      logger.error(`campaignQueue -> DispatchCampaign -> error: wbot user not found`);
+      logger.error(
+        `campaignQueue -> DispatchCampaign -> error: wbot user not found`
+      );
       return;
     }
 
@@ -718,18 +747,28 @@ async function handleDispatchCampaign(job) {
     let body = campaignShipping.message;
 
     if (campaign.confirmation && campaignShipping.confirmation === null) {
-      body = campaignShipping.confirmationMessage
+      body = campaignShipping.confirmationMessage;
     }
 
     if (!isNil(campaign.fileListId)) {
       try {
         const publicFolder = path.resolve(__dirname, "..", "public");
-        const files = await ShowFileService(campaign.fileListId, campaign.companyId)
-        const folder = path.resolve(publicFolder, "fileList", String(files.id))
+        const files = await ShowFileService(
+          campaign.fileListId,
+          campaign.companyId
+        );
+        const folder = path.resolve(publicFolder, "fileList", String(files.id));
         for (const [index, file] of files.options.entries()) {
-          const options = await getMessageOptions(file.path, path.resolve(folder, file.path), file.name);
+          const options = await getMessageOptions(
+            file.path,
+            path.resolve(folder, file.path),
+            file.name
+          );
+          console.log("queues.ts - 767");
+          console.log("body:", options);
+          console.log("chatId:", chatId);
           await wbot.sendMessage(chatId, { ...options });
-        };
+        }
       } catch (error) {
         logger.info(error);
       }
@@ -739,19 +778,30 @@ async function handleDispatchCampaign(job) {
       const publicFolder = path.resolve(__dirname, "..", "public");
       const filePath = path.join(publicFolder, campaign.mediaPath);
 
-      const options = await getMessageOptions(campaign.mediaName, filePath, body);
+      const options = await getMessageOptions(
+        campaign.mediaName,
+        filePath,
+        body
+      );
       if (Object.keys(options).length) {
+        console.log("queues.ts - 787");
+        console.log("body:", options);
+        console.log("chatId:", chatId);
         await wbot.sendMessage(chatId, { ...options });
       }
-    }
-    else {
+    } else {
       if (campaign.confirmation && campaignShipping.confirmation === null) {
+        console.log("queues.ts - 794");
+        console.log("body:", body);
+        console.log("chatId:", chatId);
         await wbot.sendMessage(chatId, {
           text: body
         });
         await campaignShipping.update({ confirmationRequestedAt: moment() });
       } else {
-
+        console.log("queues.ts - 802");
+        console.log("body:", body);
+        console.log("chatId:", chatId);
         await wbot.sendMessage(chatId, {
           text: body
         });
@@ -762,10 +812,13 @@ async function handleDispatchCampaign(job) {
     await verifyAndFinalizeCampaign(campaign);
 
     const io = getIO();
-    io.to(`company-${campaign.companyId}-mainchannel`).emit(`company-${campaign.companyId}-campaign`, {
-      action: "update",
-      record: campaign
-    });
+    io.to(`company-${campaign.companyId}-mainchannel`).emit(
+      `company-${campaign.companyId}-campaign`,
+      {
+        action: "update",
+        record: campaign
+      }
+    );
 
     logger.info(
       `Campanha enviada para: Campanha=${campaignId};Contato=${campaignShipping.contact.name}`
@@ -793,12 +846,9 @@ async function handleLoginStatus(job) {
   }
 }
 
-
 async function handleInvoiceCreate() {
   logger.info("Iniciando geração de boletos");
-  const job = new CronJob('*/5 * * * * *', async () => {
-
-
+  const job = new CronJob("*/5 * * * * *", async () => {
     const companies = await Company.findAll();
     companies.map(async c => {
       var dueDate = c.dueDate;
@@ -807,25 +857,26 @@ async function handleInvoiceCreate() {
       const hoje = moment(moment()).format("DD/MM/yyyy");
       var vencimento = moment(dueDate).format("DD/MM/yyyy");
 
-      var diff = moment(vencimento, "DD/MM/yyyy").diff(moment(hoje, "DD/MM/yyyy"));
+      var diff = moment(vencimento, "DD/MM/yyyy").diff(
+        moment(hoje, "DD/MM/yyyy")
+      );
       var dias = moment.duration(diff).asDays();
 
       if (dias < 20) {
         const plan = await Plan.findByPk(c.planId);
 
-        const sql = `SELECT COUNT(*) mycount FROM "Invoices" WHERE "companyId" = ${c.id} AND "dueDate"::text LIKE '${moment(dueDate).format("yyyy-MM-DD")}%';`
-        const invoice = await sequelize.query(sql,
-          { type: QueryTypes.SELECT }
-        );
-        if (invoice[0]['mycount'] > 0) {
-
+        const sql = `SELECT COUNT(*) mycount FROM "Invoices" WHERE "companyId" = ${
+          c.id
+        } AND "dueDate"::text LIKE '${moment(dueDate).format("yyyy-MM-DD")}%';`;
+        const invoice = await sequelize.query(sql, { type: QueryTypes.SELECT });
+        if (invoice[0]["mycount"] > 0) {
         } else {
           const sql = `INSERT INTO "Invoices" (detail, status, value, "updatedAt", "createdAt", "dueDate", "companyId")
-          VALUES ('${plan.name}', 'open', '${plan.value}', '${timestamp}', '${timestamp}', '${date}', ${c.id});`
+          VALUES ('${plan.name}', 'open', '${plan.value}', '${timestamp}', '${timestamp}', '${date}', ${c.id});`;
 
-          const invoiceInsert = await sequelize.query(sql,
-            { type: QueryTypes.INSERT }
-          );
+          const invoiceInsert = await sequelize.query(sql, {
+            type: QueryTypes.INSERT
+          });
 
           /*           let transporter = nodemailer.createTransport({
                       service: 'gmail',
@@ -855,23 +906,16 @@ async function handleInvoiceCreate() {
                       else
                         console.log(info);
                     }); */
-
         }
-
-
-
-
-
       }
-
     });
   });
-  job.start()
+  job.start();
 }
 
-handleCloseTicketsAutomatic()
+handleCloseTicketsAutomatic();
 
-handleInvoiceCreate()
+handleInvoiceCreate();
 
 export async function startQueueProcess() {
   logger.info("Iniciando processamento de filas");
@@ -893,8 +937,6 @@ export async function startQueueProcess() {
   userMonitor.process("VerifyLoginStatus", handleLoginStatus);
 
   //queueMonitor.process("VerifyQueueStatus", handleVerifyQueue);
-
-
 
   scheduleMonitor.add(
     "Verify",

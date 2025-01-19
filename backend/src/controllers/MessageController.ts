@@ -39,6 +39,8 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
   const { companyId, profile } = req.user;
   const queues: number[] = [];
 
+  // console.log("REQ:", req);
+
   if (profile !== "admin") {
     const user = await User.findByPk(req.user.id, {
       include: [{ model: Queue, as: "queues" }]
@@ -55,7 +57,8 @@ export const index = async (req: Request, res: Response): Promise<Response> => {
     queues
   });
 
-  SetTicketMessagesAsRead(ticket);
+  const SetTicketMessagesAsReadDados = SetTicketMessagesAsRead(ticket);
+  console.log("SetTicketMessagesAsReadDados", SetTicketMessagesAsReadDados);
 
   return res.json({ count, messages, ticket, hasMore });
 };
@@ -75,13 +78,18 @@ export const store = async (req: Request, res: Response): Promise<Response> => {
   if (medias) {
     await Promise.all(
       medias.map(async (media: Express.Multer.File, index) => {
-        await SendWhatsAppMedia({ media, ticket, body: Array.isArray(body) ? body[index] : body });
+        await SendWhatsAppMedia({
+          media,
+          ticket,
+          body: Array.isArray(body) ? body[index] : body
+        });
       })
     );
   } else {
     const send = await SendWhatsAppMessage({ body, ticket, quotedMsg });
+    // console.log("send", send);
   }
-
+  // await console.log("res.send", send);
   return res.send();
 };
 
@@ -108,7 +116,7 @@ export const send = async (req: Request, res: Response): Promise<Response> => {
   const messageData: MessageData = req.body;
   const medias = req.files as Express.Multer.File[];
 
-  console.log('messageData;', messageData)
+  console.log("messageData;", messageData);
 
   try {
     const whatsapp = await Whatsapp.findByPk(whatsappId);
@@ -128,10 +136,7 @@ export const send = async (req: Request, res: Response): Promise<Response> => {
 
     const CheckValidNumber = await CheckContactNumber(numberToTest, companyId);
     const number = CheckValidNumber.jid.replace(/\D/g, "");
-    const profilePicUrl = await GetProfilePicUrl(
-      number,
-      companyId
-    );
+    const profilePicUrl = await GetProfilePicUrl(number, companyId);
     const contactData = {
       name: `${number}`,
       number,
@@ -142,7 +147,12 @@ export const send = async (req: Request, res: Response): Promise<Response> => {
 
     const contact = await CreateOrUpdateContactService(contactData);
 
-    const ticket = await FindOrCreateTicketService(contact, whatsapp.id!, 0, companyId);
+    const ticket = await FindOrCreateTicketService(
+      contact,
+      whatsapp.id!,
+      0,
+      companyId
+    );
 
     if (medias) {
       await Promise.all(
@@ -166,21 +176,20 @@ export const send = async (req: Request, res: Response): Promise<Response> => {
       await SendWhatsAppMessage({ body: formatBody(body, contact), ticket });
 
       await ticket.update({
-        lastMessage: body,
+        lastMessage: body
       });
-
     }
 
     // if (messageData.closeTicket) {
-      setTimeout(async () => {
-        await UpdateTicketService({
-          ticketId: ticket.id,
-          ticketData: { status: "pending" },
-          companyId
-        });
-      }, 1000);
+    setTimeout(async () => {
+      await UpdateTicketService({
+        ticketId: ticket.id,
+        ticketData: { status: "pending" },
+        companyId
+      });
+    }, 1000);
     // }
-    
+
     SetTicketMessagesAsRead(ticket);
 
     return res.send({ mensagem: "Mensagem enviada" });
@@ -199,16 +208,16 @@ export const edit = async (req: Request, res: Response): Promise<Response> => {
   const { messageId } = req.params;
   const { companyId } = req.user;
   const { body }: MessageData = req.body;
-  console.log(body)
-  const { ticket , message } = await EditWhatsAppMessage({messageId, body});
+  console.log(body);
+  const { ticket, message } = await EditWhatsAppMessage({ messageId, body });
 
   const io = getIO();
- io.emit(`company-${companyId}-appMessage`, {
-    action:"update",
+  io.emit(`company-${companyId}-appMessage`, {
+    action: "update",
     message,
     ticket: ticket,
-    contact: ticket.contact,
+    contact: ticket.contact
   });
 
   return res.send();
-}
+};

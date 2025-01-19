@@ -1,0 +1,330 @@
+// Baileys
+{
+  messageStubParameters: [],
+  labels: [],
+  userReceipt: [],
+  reactions: [],
+  pollUpdates: [],
+  eventResponses: [],
+  key: MessageKey {
+    remoteJid: '556281762590@s.whatsapp.net',
+    fromMe: true,
+    id: '3EB0FC8CDD4416DB8B1F18'
+  },
+  message: Message {
+    extendedTextMessage: ExtendedTextMessage { text: '*Empresa Cliente:*\nsdjkalsjdklasd' }
+  },
+  messageTimestamp: Long { low: 1737111769, high: 0, unsigned: true },
+  status: 1
+}
+
+{
+    messageStubParameters: [],
+    labels: [],
+    userReceipt: [],
+    reactions: [],
+    pollUpdates: [],
+    eventResponses: [],
+    key: {
+      MessageKey: {
+        remoteJid: '556281762590@s.whatsapp.net',
+        fromMe: true,
+        id: '3EB04B6B41904BEC90D6F9D7D7297DA49E3AA567'
+      }
+    },
+    message: { Message: { extendedTextMessage: [Object] } },
+    messageTimestamp: { low: 1737115133, high: 0, unsigned: true },
+    status: 1
+  }
+
+// Evolution.data
+{
+    key: {
+      remoteJid: '556281762590@s.whatsapp.net',
+      fromMe: true,
+      id: '3EB0A08DC9347F57BCF23E41D55E10346F30DDF7'
+    },
+    pushName: '',
+    status: 'PENDING',
+    message: { conversation: 'deu certo ' },
+    contextInfo: null,
+    messageType: 'conversation',
+    messageTimestamp: 1737112052,
+    instanceId: '4db1a762-7852-4d3e-a6ff-3deecc49f7e1',
+    source: 'unknown'
+  }
+
+// Evolution
+
+:::::::::::::RESPONSE::::::::::::: {
+    status: 201,
+    statusText: 'Created',
+    headers: Object [AxiosHeaders] {
+      'access-control-allow-credentials': 'true',
+      'content-length': '335',
+      'content-type': 'application/json; charset=utf-8',
+      date: 'Fri, 17 Jan 2025 11:07:33 GMT',
+      etag: 'W/"14f-g7Gm5Z7ajPO7GR+VRRMdcUvH8LM"',
+      vary: 'Origin, Accept-Encoding',
+      'x-powered-by': 'Express',
+      connection: 'close'
+    },
+    config: {
+      transitional: {
+        silentJSONParsing: true,
+        forcedJSONParsing: true,
+        clarifyTimeoutError: false
+      },
+      adapter: [ 'xhr', 'http', 'fetch' ],
+      transformRequest: [ [Function: transformRequest] ],
+      transformResponse: [ [Function: transformResponse] ],
+      timeout: 0,
+      xsrfCookieName: 'XSRF-TOKEN',
+      xsrfHeaderName: 'X-XSRF-TOKEN',
+      maxContentLength: -1,
+      maxBodyLength: -1,
+      env: { FormData: [Function], Blob: [class Blob] },
+      validateStatus: [Function: validateStatus],
+      headers: Object [AxiosHeaders] {
+        Accept: 'application/json, text/plain, */*',
+        'Content-Type': 'application/json',
+        apikey: 'E0FEAB056BDC-48C9-BD68-0AADB62DFFE2',
+        'User-Agent': 'axios/1.7.9',
+        'Content-Length': '60',
+        'Accept-Encoding': 'gzip, compress, deflate, br'
+      },
+      method: 'post',
+      url: 'https://evo.server4you02.chatsimples.com.br/message/sendText/webinovacaochatwoot',
+      data: '{"text":"deu certo ","number":"556281762590@s.whatsapp.net"}'
+    },
+    request: <ref *1> ClientRequest {
+      _events: [Object: null prototype] {
+        abort: [Function (anonymous)],
+        aborted: [Function (anonymous)],
+        connect: [Function (anonymous)],
+        error: [Function (anonymous)],
+        socket: [Function (anonymous)],
+        timeout: [Function (anonymous)],
+        finish: [Function: requestOnFinish]
+      },
+      _eventsCount: 7,
+      _maxListeners: undefined,
+      outputData: [],
+      outputSize: 0,
+      writable: true,
+      destroyed: false,
+      _last: true,
+      chunkedEncoding: false,
+      shouldKeepAlive: false,
+      maxRequestsOnConnectionReached: false,
+      _defaultKeepAlive: true,
+      useChunkedEncodingByDefault: true,
+      sendDate: false,
+      _removedConnection: false,
+      _removedContLen: false,
+      _removedTE: false,
+      strictContentLength: false,
+      _contentLength: '60',
+      _hasBody: true,
+      _trailer: '',
+      finished: true,
+      _headerSent: true,
+      _closed: false,
+      socket: TLSSocket {
+        _tlsOptions: [Object],
+        _secureEstablished: true,
+        _securePending: false,
+        _newSessionPending: false,
+        _controlReleased: true,
+        secureConnecting: false,
+        _SNICallback: null,
+        servername: 'evo.server4you02.chatsimples.com.br',
+        alpnProtocol: false,
+        authorized: true,
+        authorizationError: null,
+        encrypted: true,
+        _events: [Object: null prototype],
+        _eventsCount: 10,
+        connecting: false,
+        _hadError: false,
+        _parent: null,
+        _host: 'evo.server4you02.chatsimples.com.br',
+        _closeAfterHandlingError: false,
+        _readableState: [ReadableState],
+        _maxListeners: undefined,
+        _writableState: [WritableState],
+        allowHalfOpen: false,
+        _sockname: null,
+        _pendingData: null,
+        _pendingEncoding: '',
+        server: undefined,
+        _server: null,
+        ssl: [TLSWrap],
+        _requestCert: true,
+        _rejectUnauthorized: true,
+        parser: null,
+        _httpMessage: [Circular *1],
+        [Symbol(alpncallback)]: null,
+        [Symbol(res)]: [TLSWrap],
+        [Symbol(verified)]: true,
+        [Symbol(pendingSession)]: null,
+        [Symbol(async_id_symbol)]: 663,
+        [Symbol(kHandle)]: [TLSWrap],
+        [Symbol(lastWriteQueueSize)]: 0,
+        [Symbol(timeout)]: null,
+        [Symbol(kBuffer)]: null,
+        [Symbol(kBufferCb)]: null,
+        [Symbol(kBufferGen)]: null,
+        [Symbol(kCapture)]: false,
+        [Symbol(kSetNoDelay)]: false,
+        [Symbol(kSetKeepAlive)]: true,
+        [Symbol(kSetKeepAliveInitialDelay)]: 60,
+        [Symbol(kBytesRead)]: 0,
+        [Symbol(kBytesWritten)]: 0,
+        [Symbol(connect-options)]: [Object]
+      },
+      _header: 'POST /message/sendText/webinovacaochatwoot HTTP/1.1\r\n' +
+        'Accept: application/json, text/plain, */*\r\n' +
+        'Content-Type: application/json\r\n' +
+        'apikey: E0FEAB056BDC-48C9-BD68-0AADB62DFFE2\r\n' +
+        'User-Agent: axios/1.7.9\r\n' +
+        'Content-Length: 60\r\n' +
+        'Accept-Encoding: gzip, compress, deflate, br\r\n' +
+        'Host: evo.server4you02.chatsimples.com.br\r\n' +
+        'Connection: close\r\n' +
+        '\r\n',
+      _keepAliveTimeout: 0,
+      _onPendingData: [Function: nop],
+      agent: Agent {
+        _events: [Object: null prototype],
+        _eventsCount: 2,
+        _maxListeners: undefined,
+        defaultPort: 443,
+        protocol: 'https:',
+        options: [Object: null prototype],
+        requests: [Object: null prototype] {},
+        sockets: [Object: null prototype],
+        freeSockets: [Object: null prototype] {},
+        keepAliveMsecs: 1000,
+        keepAlive: false,
+        maxSockets: Infinity,
+        maxFreeSockets: 256,
+        scheduling: 'lifo',
+        maxTotalSockets: Infinity,
+        totalSocketCount: 1,
+        maxCachedSessions: 100,
+        _sessionCache: [Object],
+        [Symbol(kCapture)]: false
+      },
+      socketPath: undefined,
+      method: 'POST',
+      maxHeaderSize: undefined,
+      insecureHTTPParser: undefined,
+      joinDuplicateHeaders: undefined,
+      path: '/message/sendText/webinovacaochatwoot',
+      _ended: true,
+      res: IncomingMessage {
+        _readableState: [ReadableState],
+        _events: [Object: null prototype],
+        _eventsCount: 4,
+        _maxListeners: undefined,
+        socket: [TLSSocket],
+        httpVersionMajor: 1,
+        httpVersionMinor: 1,
+        httpVersion: '1.1',
+        complete: true,
+        rawHeaders: [Array],
+        rawTrailers: [],
+        joinDuplicateHeaders: undefined,
+        aborted: false,
+        upgrade: false,
+        url: '',
+        method: null,
+        statusCode: 201,
+        statusMessage: 'Created',
+        client: [TLSSocket],
+        _consuming: false,
+        _dumped: false,
+        req: [Circular *1],
+        responseUrl: 'https://evo.server4you02.chatsimples.com.br/message/sendText/webinovacaochatwoot',
+        redirects: [],
+        [Symbol(kCapture)]: false,
+        [Symbol(kHeaders)]: [Object],
+        [Symbol(kHeadersCount)]: 16,
+        [Symbol(kTrailers)]: null,
+        [Symbol(kTrailersCount)]: 0
+      },
+      aborted: false,
+      timeoutCb: null,
+      upgradeOrConnect: false,
+      parser: null,
+      maxHeadersCount: null,
+      reusedSocket: false,
+      host: 'evo.server4you02.chatsimples.com.br',
+      protocol: 'https:',
+      _redirectable: Writable {
+        _writableState: [WritableState],
+        _events: [Object: null prototype],
+        _eventsCount: 3,
+        _maxListeners: undefined,
+        _options: [Object],
+        _ended: true,
+        _ending: true,
+        _redirectCount: 0,
+        _redirects: [],
+        _requestBodyLength: 60,
+        _requestBodyBuffers: [],
+        _onNativeResponse: [Function (anonymous)],
+        _currentRequest: [Circular *1],
+        _currentUrl: 'https://evo.server4you02.chatsimples.com.br/message/sendText/webinovacaochatwoot',
+        [Symbol(kCapture)]: false
+      },
+      [Symbol(kCapture)]: false,
+      [Symbol(kBytesWritten)]: 0,
+      [Symbol(kNeedDrain)]: false,
+      [Symbol(corked)]: 0,
+      [Symbol(kOutHeaders)]: [Object: null prototype] {
+        accept: [Array],
+        'content-type': [Array],
+        apikey: [Array],
+        'user-agent': [Array],
+        'content-length': [Array],
+        'accept-encoding': [Array],
+        host: [Array]
+      },
+      [Symbol(errored)]: null,
+      [Symbol(kHighWaterMark)]: 16384,
+      [Symbol(kRejectNonStandardBodyWrites)]: false,
+      [Symbol(kUniqueHeaders)]: null
+    },
+    data: {
+      key: {
+        remoteJid: '556281762590@s.whatsapp.net',
+        fromMe: true,
+        id: '3EB0A08DC9347F57BCF23E41D55E10346F30DDF7'
+      },
+      pushName: '',
+      status: 'PENDING',
+      message: { conversation: 'deu certo ' },
+      contextInfo: null,
+      messageType: 'conversation',
+      messageTimestamp: 1737112052,
+      instanceId: '4db1a762-7852-4d3e-a6ff-3deecc49f7e1',
+      source: 'unknown'
+    }
+  }
+  :::::::::::::RESPONSE::::::::::::: {
+    key: {
+      remoteJid: '556281762590@s.whatsapp.net',
+      fromMe: true,
+      id: '3EB0A08DC9347F57BCF23E41D55E10346F30DDF7'
+    },
+    pushName: '',
+    status: 'PENDING',
+    message: { conversation: 'deu certo ' },
+    contextInfo: null,
+    messageType: 'conversation',
+    messageTimestamp: 1737112052,
+    instanceId: '4db1a762-7852-4d3e-a6ff-3deecc49f7e1',
+    source: 'unknown'
+  }

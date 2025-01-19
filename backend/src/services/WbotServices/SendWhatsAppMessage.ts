@@ -4,6 +4,7 @@ import AppError from "../../errors/AppError";
 import GetTicketWbot from "../../helpers/GetTicketWbot";
 import Message from "../../models/Message";
 import Ticket from "../../models/Ticket";
+import { sendEvolutionMessage } from "../EvolutionServices/SendEvolutionMessage";
 
 import formatBody from "../../helpers/Mustache";
 import { map_msg } from "../../utils/global";
@@ -21,9 +22,11 @@ const SendWhatsAppMessage = async ({
 }: Request): Promise<WAMessage> => {
   let options = {};
   const wbot = await GetTicketWbot(ticket);
-  const number = `${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"
-    }`;
-  console.log("number", number);
+  const number = `${ticket.contact.number}@${
+    ticket.isGroup ? "g.us" : "s.whatsapp.net"
+  }`;
+  // console.log("number id", number);
+  // console.log("Body", body);
   if (quotedMsg) {
     const chatMessages = await Message.findOne({
       where: {
@@ -43,22 +46,32 @@ const SendWhatsAppMessage = async ({
         }
       };
     }
-
   }
 
   try {
-    console.log('body:::::::::::::::::::::::::::', body)
-    map_msg.set(ticket.contact.number, { lastSystemMsg: body })
-    console.log('lastSystemMsg:::::::::::::::::::::::::::', ticket.contact.number)
-    const sentMessage = await wbot.sendMessage(number, {
-      text: formatBody(body, ticket.contact)
-    },
-      {
-        ...options
-      }
-    );
+    // console.log('body:::::::::::::::::::::::::::', body)
+    map_msg.set(ticket.contact.number, { lastSystemMsg: body });
+    // console.log('lastSystemMsg:::::::::::::::::::::::::::', ticket.contact.number)
+    // const sentMessage = await wbot.sendMessage(
+    //   number,
+    //   {
+    //     text: formatBody(body, ticket.contact)
+    //   },
+    //   {
+    //     ...options
+    //   }
+    // );
+    const sentMessage = null;
+    const data = {
+      number: number,
+      text: body
+    };
+    sendEvolutionMessage(data);
+
+    // console.log("sentMessage", sentMessage);
+
     await ticket.update({ lastMessage: formatBody(body, ticket.contact) });
-    console.log("Message sent", sentMessage);
+    // console.log("Message sent", sentMessage);
     return sentMessage;
   } catch (err) {
     Sentry.captureException(err);

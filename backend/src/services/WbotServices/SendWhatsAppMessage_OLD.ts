@@ -21,8 +21,9 @@ const SendWhatsAppMessage = async ({
 }: Request): Promise<WAMessage> => {
   let options = {};
   const wbot = await GetTicketWbot(ticket);
-  const number = `${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"
-    }`;
+  const number = `${ticket.contact.number}@${
+    ticket.isGroup ? "g.us" : "s.whatsapp.net"
+  }`;
   console.log("number", number);
   if (quotedMsg) {
     const chatMessages = await Message.findOne({
@@ -43,16 +44,26 @@ const SendWhatsAppMessage = async ({
         }
       };
     }
-
   }
 
   try {
-    console.log('body:::::::::::::::::::::::::::', body)
-    map_msg.set(ticket.contact.number, { lastSystemMsg: body })
-    console.log('lastSystemMsg:::::::::::::::::::::::::::', ticket.contact.number)
-    const sentMessage = await wbot.sendMessage(number, {
-      text: formatBody(body, ticket.contact)
-    },
+    console.log("body:::::::::::::::::::::::::::", body);
+    map_msg.set(ticket.contact.number, { lastSystemMsg: body });
+    console.log(
+      "lastSystemMsg:::::::::::::::::::::::::::",
+      ticket.contact.number
+    );
+
+    console.log("SendWhatsAppMensage_OLD.ts - 57");
+    console.log("number:", number);
+    console.log("body:", formatBody(body, ticket.contact));
+    console.log("options:", options);
+
+    const sentMessage = await wbot.sendMessage(
+      number,
+      {
+        text: formatBody(body, ticket.contact)
+      },
       {
         ...options
       }

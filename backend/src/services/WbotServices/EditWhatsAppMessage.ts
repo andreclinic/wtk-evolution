@@ -12,9 +12,8 @@ interface Request {
 
 const EditWhatsAppMessage = async ({
   messageId,
-  body,
-}: Request): Promise<{ ticket: Ticket , message: Message}> => {
-  
+  body
+}: Request): Promise<{ ticket: Ticket; message: Message }> => {
   const message = await Message.findByPk(messageId, {
     include: [
       {
@@ -24,7 +23,7 @@ const EditWhatsAppMessage = async ({
       }
     ]
   });
-  
+
   if (!message) {
     throw new AppError("No message found with this ID.");
   }
@@ -32,23 +31,30 @@ const EditWhatsAppMessage = async ({
   const { ticket } = message;
 
   const wbot = await GetTicketWbot(ticket);
-  
-  const msg = JSON.parse(message.dataJson);
-  
-  try {
-	await wbot.sendMessage(message.remoteJid, {
-	  text: body,
-	  edit: msg.key,
-	},{});
 
-	message.update({ body: body, isEdited: true});
-	
-    return { ticket: message.ticket , message: message };
+  const msg = JSON.parse(message.dataJson);
+
+  try {
+    console.log("EditWhatsAppMessage.ts - 38");
+    console.log("chatId:", message.remoteJid);
+    console.log("body:", body);
+    console.log("edit:", msg.key);
+    await wbot.sendMessage(
+      message.remoteJid,
+      {
+        text: body,
+        edit: msg.key
+      },
+      {}
+    );
+
+    message.update({ body: body, isEdited: true });
+
+    return { ticket: message.ticket, message: message };
   } catch (err) {
-	console.log(err);
+    console.log(err);
     throw new AppError("ERR_EDITING_WAPP_MSG");
   }
-
 };
 
 export default EditWhatsAppMessage;

@@ -63,7 +63,7 @@ export const getMessageOptions = async (
     if (typeMessage === "video") {
       options = {
         video: fs.readFileSync(pathMedia),
-        caption: body ? body : '',
+        caption: body ? body : "",
         fileName: fileName
         // gifPlayback: true
       };
@@ -125,7 +125,7 @@ const SendWhatsAppMedia = async ({
     const pathMedia = media.path;
     const typeMessage = media.mimetype.split("/")[0];
     let options: AnyMessageContent;
-    const bodyMessage = formatBody(body, ticket.contact)
+    const bodyMessage = formatBody(body, ticket.contact);
 
     if (typeMessage === "video") {
       options = {
@@ -167,11 +167,17 @@ const SendWhatsAppMedia = async ({
     } else {
       options = {
         image: fs.readFileSync(pathMedia),
-        caption: bodyMessage,
+        caption: bodyMessage
       };
     }
 
-    console.log("options", options);
+    // console.log("options", options);
+    console.log("SendWhatsAppMidia.ts - 175");
+    console.log(
+      "number:",
+      `${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`
+    );
+    console.log("body:", options);
     const sentMessage = await wbot.sendMessage(
       `${ticket.contact.number}@${ticket.isGroup ? "g.us" : "s.whatsapp.net"}`,
       {
@@ -180,6 +186,8 @@ const SendWhatsAppMedia = async ({
     );
 
     await ticket.update({ lastMessage: bodyMessage });
+
+    // console.log("Message Mídia", sentMessage);
 
     return sentMessage;
   } catch (err) {

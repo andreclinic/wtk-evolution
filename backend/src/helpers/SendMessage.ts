@@ -29,12 +29,18 @@ export const SendMessage = async (
       );
       if (options) {
         const body = fs.readFileSync(messageData.mediaPath);
+        console.log("SendMessage.ts - 32");
+        console.log("chatId:", chatId);
+        console.log("body:", options);
         message = await wbot.sendMessage(chatId, {
           ...options
         });
       }
     } else {
       const body = `\u200e ${messageData.body}`;
+      console.log("SendMessage.ts - 41");
+      console.log("chatId:", chatId);
+      console.log("body:", body);
       message = await wbot.sendMessage(chatId, { text: body });
     }
 
