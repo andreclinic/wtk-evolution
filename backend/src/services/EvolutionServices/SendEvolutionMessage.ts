@@ -1,6 +1,6 @@
 import axios from "axios";
 import formatNumber from "./Helpres/formatNumber";
-import findOrCreateContactService from "./FindOrCreateContactService";
+// import findOrCreateContactService from "./FindOrCreateContactService";
 import mapEvolutionToBaileys from "./Helpres/normalizeEvolutionResponse";
 
 /**

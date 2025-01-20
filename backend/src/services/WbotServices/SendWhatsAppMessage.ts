@@ -51,7 +51,10 @@ const SendWhatsAppMessage = async ({
   try {
     // console.log('body:::::::::::::::::::::::::::', body)
     map_msg.set(ticket.contact.number, { lastSystemMsg: body });
-    // console.log('lastSystemMsg:::::::::::::::::::::::::::', ticket.contact.number)
+    console.log(
+      "lastSystemMsg:::::::::::::::::::::::::::",
+      ticket.contact.number
+    );
     // const sentMessage = await wbot.sendMessage(
     //   number,
     //   {
